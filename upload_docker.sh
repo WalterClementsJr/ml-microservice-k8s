@@ -3,13 +3,14 @@
 
 # Assumes that an image is built via `run_docker.sh`
 
-# Step 1:
 # Create dockerpath
-# dockerpath=<your docker ID/path>
+dockerpath=walterclementsjr/devops-ml
 
-# Step 2:  
 # Authenticate & tag
 echo "Docker ID and Image: $dockerpath"
 
-# Step 3:
+docker login -u walterclementsjr
+docker tag devops-ml $dockerpath:latest
+
 # Push image to a docker repository
+docker push $dockerpath:latest
