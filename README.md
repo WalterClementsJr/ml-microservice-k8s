@@ -32,32 +32,41 @@ python3 -m pip install --user virtualenv
 # You should have Python 3.7 available in your host. 
 # Check the Python path using `which python3`
 # Use a command similar to this one:
-python3 -m virtualenv --python=<path-to-Python3.7> .devops
+python3 -m virtualenv --python=<path-to-Python3.7> .
 source .devops/bin/activate
 ```
 * Run `make install` to install the necessary dependencies
 
 ### Running `app.py`
 
-1. Standalone:  `python app.py`
-2. Run in Docker:  `./run_docker.sh`
-3. Run in Kubernetes:  `./run_kubernetes.sh`
+1. Standalone: `python app.py`
+2. Run in Docker: `./run_docker.sh`
+3. Run in Kubernetes: `./run_kubernetes.sh`
 
 ### Kubernetes Steps
 
 * Setup and Configure Docker locally
-* Setup and Configure Kubernetes locally
-* Create Flask app in Container
-* Run via kubectl
+  * Go to https://www.docker.com/products/docker-desktop/ and follow the instruction to install docker desktop
+  * Verify installation by `docker --version`
 
+* Setup and Configure Kubernetes locally
+  - using Docker Desktop on Win10:
+    Go into the setting -> Kubernetes -> Enable Kubernetes
+  - Verify installation using `kubectl version --output yaml`
+* Create Flask app in Container: `./run_docker.sh`
+* Push image to Dockerhub: `./upload_docker.sh`
+* Run via kubectl
+  - run `./run_kubernetes.sh`
+  - Check if the pod is in READY state: `kubectl get pods`
+  - run `./run_kubernetes.sh` again.
+    forward the port 8080:80 and then visit localhost:8080
 
 ### Description of the files
 
 - .circleci/config.yml CircleCI configuration
 - .dockerignore: Ignore the file when using COPY command in Dockerfile
-- .env: The environment variable file that contain secret variable like Docker Hub password
 - app.py: API for predicting house pricing
-- output_txt_files: Docker and Kubernetes log output
+- output_txt_files/: Docker and Kubernetes log output
 - Dockerfile: Dockerfile containing the application and its dependencies
 - make_prediction.sh: Calls prediction REST endpoint and simulates sample prediction
 - Makefile: instruction to set up environment, install dependencies, test and lint
@@ -66,3 +75,4 @@ source .devops/bin/activate
 - run_docker.sh: Shell script for creating and running docker container
 - run_kubernetes.sh: Shell script to deploy docker container on Kubernetes cluster
 - upload_docker.sh: Shell script for uploading docker image to dockerhub repository
+- `make_prediction.sh`: Calls prediction API endpoint and get prediction
